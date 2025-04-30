@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Spin the Wheel!</title>
+  <style>
+    body { 
+      font-family: Arial; 
+      text-align: center; 
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    #container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input {
+      padding: 10px;
+      margin: 10px;
+      width: 200px;
+    }
+    button {
+      padding: 12px 24px;
+      background: #4285F4;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h1>Spin the Wheel!</h1>
+    <input id="name" placeholder="Your name" required>
+    
+    <!-- Paste your WheelofNames embed code below -->
+    <iframe src="https://wheelofnames.com/39m-stv" 
+            width="500" height="500" frameborder="0"></iframe>
+    
+    <p id="result"></p>
+  </div>
+
+  <script>
+    document.querySelector('iframe').onload = function() {
+      window.addEventListener('message', (event) => {
+        if (event.data.includes('wheel-result:')) {
+          const result = event.data.split(':')[1];
+          const name = document.getElementById('name').value;
+          
+          if (name) {
+            fetch('https://script.google.com/macros/s/AKfycbxwMxCHQv1xlxuYBFj6qLQNBicsY7kypZJnsO-RGYCYyh5BUnCBGwhOq6Or3xurJNG1/exec', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name, result })
+            }).then(() => {
+              document.getElementById('result').innerHTML = 
+                `Saved! ${name} got ${result}`;
+            });
+          }
+        }
+      });
+    };
+  </script>
+</body>
+</html>
